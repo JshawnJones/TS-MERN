@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/ban-types */
 import React from 'react'
 import { Cart, CartItem } from './types/Cart'
 import { UserInfo } from './types/UserInfo'
@@ -42,6 +43,7 @@ type Action =
   | { type: 'CART_REMOVE_ITEM'; payload: CartItem }
   | { type: 'USER_SIGNIN'; payload: UserInfo }
   | { type: 'USER_SIGNOUT' }
+  | { type: 'SAVE_SHIPPING_ADDRESS'; payload: ShippingAddress }
 
 function reducer(state: AppState, action: Action): AppState {
   switch (action.type) {
@@ -95,6 +97,14 @@ function reducer(state: AppState, action: Action): AppState {
           totalPrice: 0,
         },
       }
+    case 'SAVE_SHIPPING_ADDRESS':
+      return {
+        ...state,
+        cart: {
+          ...state.cart,
+          shippingAddress: action.payload,
+        },
+      }
     default:
       return state
   }
@@ -106,7 +116,7 @@ const Store = React.createContext({
   dispatch: defaultDispatch,
 })
 
-function StoreProvider(props: React.PropsWithChildren<{ any: unknown }>) {
+function StoreProvider(props: React.PropsWithChildren<{}>) {
   const [state, dispatch] = React.useReducer<React.Reducer<AppState, Action>>(
     reducer,
     initialState
