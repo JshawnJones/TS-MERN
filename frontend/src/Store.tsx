@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/ban-types */
 import React from 'react'
-import { Cart, CartItem } from './types/Cart'
+import { Cart, CartItem, ShippingAddress } from './types/Cart'
 import { UserInfo } from './types/UserInfo'
 
 type AppState = {
@@ -44,10 +44,12 @@ type Action =
   | { type: 'USER_SIGNIN'; payload: UserInfo }
   | { type: 'USER_SIGNOUT' }
   | { type: 'SAVE_SHIPPING_ADDRESS'; payload: ShippingAddress }
+  | { type: 'SAVE_PAYMENT_METHOD'; payload: string }
 
 function reducer(state: AppState, action: Action): AppState {
   switch (action.type) {
     case 'SWITCH_MODE':
+      localStorage.setItem('mode', state.mode === 'dark' ? 'light' : 'dark')
       return { ...state, mode: state.mode === 'dark' ? 'light' : 'dark' }
     case 'CART_ADD_ITEM': {
       const newItem = action.payload
@@ -104,6 +106,11 @@ function reducer(state: AppState, action: Action): AppState {
           ...state.cart,
           shippingAddress: action.payload,
         },
+      }
+    case 'SAVE_PAYMENT_METHOD':
+      return {
+        ...state,
+        cart: { ...state.cart, paymentMethod: action.payload },
       }
     default:
       return state
