@@ -106,7 +106,7 @@ const Store = React.createContext({
   dispatch: defaultDispatch,
 })
 
-function StoreProvider(props: React.PropsWithChildren<{}>) {
+function StoreProvider(props: React.PropsWithChildren<{ any: unknown }>) {
   const [state, dispatch] = React.useReducer<React.Reducer<AppState, Action>>(
     reducer,
     initialState
